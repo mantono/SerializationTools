@@ -8,7 +8,7 @@ import java.io.Serializable;
  *
  * @param <T> the type of the object that will be saved and/or loaded.
  */
-public interface FileManager<T>
+public interface FileManager<T> extends Runnable
 {
 	/**
 	 * 
@@ -28,4 +28,16 @@ public interface FileManager<T>
 	 * {@link FileManager}.
 	 */
 	T load();
+
+	/**
+	 * The default behavior is to call the {@link #save()} method unless
+	 * overriden. This allows the object managed by this instance to be
+	 * automatically saved on exit if added to a shutdown hook via
+	 * {@link Runtime#addShutdownHook(Thread)} wrapped in a {@link Thread}.
+	 */
+	@Override
+	default void run()
+	{
+		save();
+	}
 }
